@@ -316,7 +316,7 @@ public class MainActivity extends FragmentActivity implements IBeaconConsumer, R
                     imageValue++;
                     break;
                 case 2:
-                    activityBackground = R.drawable.bg_parking3;
+                    activityBackground = R.drawable.bg_parking_3;
                     imageValue = 0;
                     break;
                 default:
@@ -335,7 +335,7 @@ public class MainActivity extends FragmentActivity implements IBeaconConsumer, R
                     imageValue++;
                     break;
                 case 1:
-                    activityBackground = R.drawable.bg_checkin2;
+                    activityBackground = R.drawable.bg_checkin_2;
                     imageValue++;
                     break;
                 case 2:
@@ -358,7 +358,7 @@ public class MainActivity extends FragmentActivity implements IBeaconConsumer, R
                     imageValue++;
                     break;
                 case 1:
-                    activityBackground = R.drawable.bg_club3;
+                    activityBackground = R.drawable.bg_club2;
                     imageValue = 0;
                     break;
                 default:
@@ -378,10 +378,6 @@ public class MainActivity extends FragmentActivity implements IBeaconConsumer, R
                     break;
                 case 1:
                     activityBackground = R.drawable.bg_gate2;
-                    imageValue++;
-                    break;
-                case 2:
-                    activityBackground = R.drawable.bg_gate3;
                     imageValue = 0;
                     break;
                 default:
@@ -404,11 +400,7 @@ public class MainActivity extends FragmentActivity implements IBeaconConsumer, R
                     imageValue++;
                     break;
                 case 2:
-                    activityBackground = R.drawable.bg_security3;
-                    imageValue++;
-                    break;
-                case 3:
-                    activityBackground = R.drawable.bg_security_4;
+                    activityBackground = R.drawable.bg_security_3;
                     imageValue = 0;
                     break;
                 default:
