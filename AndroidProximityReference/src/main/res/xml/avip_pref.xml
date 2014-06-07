@@ -22,5 +22,10 @@
             android:summary="Fragment Line 3"
             android:title="FRAGMENT LINE 3"
             android:defaultValue="LINE 3"/>
+        <CheckBoxPreference
+            android:key="avip_weather_enabled"
+            android:summary="Weather enable option."
+            android:title="WEATHER ENABLE"
+            android:defaultValue="false" />
     </PreferenceCategory>
 </PreferenceScreen>

@@ -8,14 +8,15 @@
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/avip_background" />
+        android:id="@+id/avip_background"
+        android:background="@drawable/bg_parking" />
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/avip_sticky_container"
-        android:background="@android:color/black"
+        android:background="@drawable/dark_trans_bg"
         android:layout_gravity="top|center_horizontal">
 
         <LinearLayout
@@ -23,7 +24,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/avip_sticky_flight_icon_container"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:padding="5dp">
 
             <ImageView
                 android:layout_width="fill_parent"
@@ -36,6 +38,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/avip_sticky_spacer_1"
+            android:padding="1dp"
+            android:visibility="invisible" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/avip_sticky_flight_container"
+            android:padding="15dp" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="FLIGHT 390"
+                android:id="@+id/avip_sticky_flight_number"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/avip_sticky_spacer_2"
             android:padding="1dp"
             android:visibility="invisible" />
 
@@ -58,7 +83,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/avip_sticky_spacer_2"
+            android:id="@+id/avip_sticky_spacer_3"
             android:padding="1dp"
             android:visibility="invisible" />
 
@@ -68,12 +93,14 @@
             android:layout_height="wrap_content"
             android:focusableInTouchMode="false"
             android:id="@+id/avip_sticky_departure_container"
-            android:padding="15dp">
+            android:padding="15dp"
+            android:layout_gravity="right"
+            android:gravity="right">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="12:00 AM CST"
+                android:text="0:46"
                 android:id="@+id/avip_sticky_departure"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
@@ -85,7 +112,7 @@
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="bottom|center"
         android:id="@+id/avip_button_container">
 
         <LinearLayout
@@ -107,9 +134,10 @@
                     android:layout_height="wrap_content"
                     android:text="FLIGHT"
                     android:id="@+id/avip_flight_button"
-                    android:background="@drawable/avip_button_background"
+                    android:background="@drawable/dark_trans_bg"
                     android:padding="20dp"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@android:color/white"
+                    android:textSize="24sp" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -123,9 +151,10 @@
                     android:layout_height="wrap_content"
                     android:text="WI-FI"
                     android:id="@+id/avip_wifi_button"
-                    android:background="@drawable/avip_button_background"
+                    android:background="@drawable/dark_trans_bg"
                     android:padding="20dp"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@android:color/white"
+                    android:textSize="24sp" />
 
             </LinearLayout>
 
@@ -149,9 +178,10 @@
                     android:layout_height="wrap_content"
                     android:text="WEATHER"
                     android:id="@+id/avip_weather_button"
-                    android:background="@drawable/avip_button_background"
+                    android:background="@drawable/dark_trans_bg"
                     android:padding="20dp"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@android:color/white"
+                    android:textSize="24sp" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -163,11 +193,12 @@
                 <Button
                     android:layout_width="128dp"
                     android:layout_height="wrap_content"
-                    android:text="BONUS"
+                    android:text="CLUB"
                     android:id="@+id/avip_deal_button"
-                    android:background="@drawable/avip_button_background"
+                    android:background="@drawable/dark_trans_bg"
                     android:padding="20dp"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@android:color/white"
+                    android:textSize="24sp" />
             </LinearLayout>
         </LinearLayout>
 

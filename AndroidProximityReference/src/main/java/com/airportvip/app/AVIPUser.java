@@ -4,10 +4,11 @@ public class AVIPUser {
 
     private String vipName;
     private String airportName;
-    private String destinationName;
+    private String originName;
     private String arrivalName;
     private String etaDestination;
     private String etaDeparture;
+    private String etaFlight;
     private String gateNumber;
     private String seatNumber;
     private String flightNumber;
@@ -22,15 +23,16 @@ public class AVIPUser {
     public void initializeVIP() {
 
         // Sets the default variables for the DQMaps class.
-        vipName = "Michael Jordan";
+        vipName = "Tony Hawk";
         airportName = "SFO";
-        destinationName = "San Francisco, CA";
-        arrivalName = "Chicago, IL";
+        originName = "San Francisco, California";
+        arrivalName = "Minneapolis-St. Paul, Minnesota";
         gateNumber = "GATE A20";
         seatNumber = "SEAT 1A";
         etaDeparture = "12:45 PM PST";
         etaDestination = "6:00 PM CST";
-        flightNumber = "AA 1234";
+        etaFlight = "0:45";
+        flightNumber = "FLIGHT AA 390";
     }
 
     /** GET FUNCTIONALITY **/
@@ -47,7 +49,7 @@ public class AVIPUser {
 
     public String getDestinationName() {
 
-        return this.destinationName;
+        return this.originName;
     }
 
     public String getArrivalName() {
@@ -63,6 +65,11 @@ public class AVIPUser {
     public String getEtaDeparture() {
 
         return this.etaDeparture;
+    }
+
+    public String getEtaFlight() {
+
+        return this.etaFlight;
     }
 
     public String getGateNumber() {
@@ -94,7 +101,7 @@ public class AVIPUser {
 
     public void setDestinationName(String name) {
 
-        this.destinationName = name;
+        this.originName = name;
     }
 
     public void setArrivalName(String name) {
@@ -127,4 +134,8 @@ public class AVIPUser {
         this.flightNumber = name;
     }
 
+    public void setEtaFlight(String name) {
+
+        this.etaFlight = name;
+    }
 }

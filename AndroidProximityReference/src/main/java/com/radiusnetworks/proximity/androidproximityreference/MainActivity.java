@@ -30,8 +30,10 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airportvip.app.AVIPFont;
 import com.airportvip.app.AVIPFragment;
 import com.airportvip.app.AVIPUser;
+import com.airportvip.app.AVIPWeather;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -65,6 +67,9 @@ public class MainActivity extends FragmentActivity implements IBeaconConsumer, R
 
     // CLASS VARIABLES
     private AVIPUser vip;
+    private AVIPWeather vipWeather;
+
+    TextView departureTime;
 
     private void chooseLayout(Boolean isDebug) {
 
@@ -76,9 +81,11 @@ public class MainActivity extends FragmentActivity implements IBeaconConsumer, R
 
             setContentView(R.layout.avip_main);
 
-            // INITIALIZE AVIPUser class.
+            // INITIALIZE AVIPUser & AVIPWeather class.
             vip = new AVIPUser();
             vip.initializeVIP(); // Sets the VIP dummy stats.
+            vipWeather = new AVIPWeather();
+            vipWeather.initializeWeather(); // Sets the dummy weather stats.
 
             // LAYOUT INITIALIZATION
             setUpLayout(); // Sets up the layout for the activity.
@@ -87,6 +94,9 @@ public class MainActivity extends FragmentActivity implements IBeaconConsumer, R
             setUpBackground(currentFragment); // Sets up the background image.
 
             welcomeVIP(); // Shows the first two frames.
+
+            // Starts countdown timer.
+            countDownToFlight();
         }
     }
 
@@ -134,7 +144,7 @@ public class MainActivity extends FragmentActivity implements IBeaconConsumer, R
         int activityBackground;
 
         if (fragment.equals("WELCOME")) {
-            activityBackground = R.drawable.bg_parking;
+            activityBackground = R.drawable.bg_parking_v2;
         }
 
         else {
@@ -166,16 +176,19 @@ public class MainActivity extends FragmentActivity implements IBeaconConsumer, R
         Picasso.with(this).load(flightIcon).noFade().into(avip_flight_icon); // Loads the image into the ImageView object.
 
         // Gate information.
+        departureTime = (TextView) findViewById(R.id.avip_sticky_departure);
         TextView gateText = (TextView) findViewById(R.id.avip_sticky_gate);
-        TextView departureTime = (TextView) findViewById(R.id.avip_sticky_departure);
+        TextView flightNumber = (TextView) findViewById(R.id.avip_sticky_flight_number);
 
         // Sets sticky text properties.
+        flightNumber.setText(vip.getFlightNumber());
         gateText.setText(vip.getGateNumber());
         departureTime.setText(vip.getEtaDeparture());
 
         // Sets custom font properties.
-        //gateText.setTypeface(AVIPFont.getInstance(this).getTypeFace());
-        //departureTime.setTypeface(AVIPFont.getInstance(this).getTypeFace());
+        flightNumber.setTypeface(AVIPFont.getInstance(this).getTypeFace());
+        gateText.setTypeface(AVIPFont.getInstance(this).getTypeFace());
+        departureTime.setTypeface(AVIPFont.getInstance(this).getTypeFace());
     }
 
     private void setUpButtons() {
@@ -185,6 +198,12 @@ public class MainActivity extends FragmentActivity implements IBeaconConsumer, R
         Button wifiButton = (Button) findViewById(R.id.avip_wifi_button);
         Button weatherButton = (Button) findViewById(R.id.avip_weather_button);
         Button dealButton = (Button) findViewById(R.id.avip_deal_button);
+
+        // Set custom text.
+        flightButton.setTypeface(AVIPFont.getInstance(this).getTypeFace());
+        wifiButton.setTypeface(AVIPFont.getInstance(this).getTypeFace());
+        weatherButton.setTypeface(AVIPFont.getInstance(this).getTypeFace());
+        dealButton.setTypeface(AVIPFont.getInstance(this).getTypeFace());
 
         flightButton.setOnClickListener(new View.OnClickListener() {
 
@@ -299,27 +318,23 @@ public class MainActivity extends FragmentActivity implements IBeaconConsumer, R
         }.start();
     }
 
+    private void updateFragmentText(String fragment) {
 
-    private void resetPreferences() {
+        // Preference values.
+        String avip_line_1, avip_line_2, avip_line_3, avip_weather;
+        Boolean isWeather = false;
 
         // Sets the preferences.
         AVIP_temps = getSharedPreferences("avip_temps", Context.MODE_PRIVATE);
         AVIP_temps_editor = AVIP_temps.edit();  // Sets up shared preferences for editing.
-        AVIP_temps_editor.putString("avip_line_1", "");
-        AVIP_temps_editor.putString("avip_line_2", "");
-        AVIP_temps_editor.putString("avip_line_3", "");
-        AVIP_temps_editor.commit(); // Saves the new preferences.
-    }
-
-    private void updateFragmentText(String fragment) {
-
-        String avip_line_1, avip_line_2, avip_line_3;
 
         // Update the fragment texts.
         if (fragment.equals("WELCOME")) {
             avip_line_1 = "Welcome to " + vip.getAirportName() + " Airport,"  ;
             avip_line_2 = vip.getVipName() + ".";
             avip_line_3 = "";
+
+            AVIP_temps_editor.putBoolean("avip_weather_enabled", false); // Disables weather icon.
         }
 
         // Update the fragment texts.
@@ -327,35 +342,42 @@ public class MainActivity extends FragmentActivity implements IBeaconConsumer, R
             avip_line_1 = "Please get your";
             avip_line_2 = "boarding pass ready.";
             avip_line_3 = "";
+
+            AVIP_temps_editor.putBoolean("avip_weather_enabled", false); // Disables weather icon.
         }
 
         else if (fragment.equals("FLIGHT")) {
             avip_line_1 = vip.getDestinationName();
             avip_line_2 = vip.getFlightNumber();
             avip_line_3 = vip.getSeatNumber();
+
+            AVIP_temps_editor.putBoolean("avip_weather_enabled", false); // Disables weather icon.
         }
 
         else if (fragment.equals("WEATHER")) {
-            avip_line_1 = vip.getDestinationName();
-            avip_line_2 = "48°";
-            avip_line_3 = "";
+            avip_line_1 = vipWeather.getArrivalName();
+            avip_line_2 = vipWeather.getArrivalTemp();
+            avip_line_3 = vipWeather.getArriveCurrentWeather();
+
+            AVIP_temps_editor.putBoolean("avip_weather_enabled", true); // Enable weather icon.
         }
 
         else if (fragment.equals("WIFI")) {
             avip_line_1 = "NETWORK: SAY_guest";
             avip_line_2 = "PASSWORD: sayernet";
             avip_line_3 = "";
+
+            AVIP_temps_editor.putBoolean("avip_weather_enabled", false); // Disables weather icon.
         }
 
         else {
             avip_line_1 = "Welcome to " + vip.getAirportName() + " Airport,"  ;
             avip_line_2 = vip.getVipName() + ".";
             avip_line_3 = "";
+
+            AVIP_temps_editor.putBoolean("avip_weather_enabled", false); // Disables weather icon.
         }
 
-        // Sets the preferences.
-        AVIP_temps = getSharedPreferences("avip_temps", Context.MODE_PRIVATE);
-        AVIP_temps_editor = AVIP_temps.edit();  // Sets up shared preferences for editing.
         AVIP_temps_editor.putString("avip_line_1", avip_line_1);
         AVIP_temps_editor.putString("avip_line_2", avip_line_2);
         AVIP_temps_editor.putString("avip_line_3", avip_line_3);
@@ -393,7 +415,7 @@ public class MainActivity extends FragmentActivity implements IBeaconConsumer, R
 
                     } else if (HackathonBeacon.PARKING == foundHackathonBeacon) {
 
-                        activityBackground = R.drawable.bg_parking;
+                        activityBackground = R.drawable.bg_parking_v2;
                         Picasso.with(MainActivity.this).load(activityBackground).noFade().into(avip_background); // Loads the image into the ImageView object.
 
                     } else if (HackathonBeacon.GATE_A22 == foundHackathonBeacon) {
@@ -426,6 +448,21 @@ public class MainActivity extends FragmentActivity implements IBeaconConsumer, R
                 }
             }
         });
+    }
+
+    // Countdown Timer.
+    private void countDownToFlight() {
+
+        new CountDownTimer(1800000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+               departureTime.setText("0:" + millisUntilFinished / 1000 / 60);
+            }
+
+            public void onFinish() {
+                departureTime.setText("DEPARTED");
+            }
+        }.start();
     }
 
     /** INTERFACE FUNCTIONALITY ________________________________________________________________ **/
@@ -631,19 +668,19 @@ public class MainActivity extends FragmentActivity implements IBeaconConsumer, R
                 if (!sameHackathonBeacon || !sameDistance) {
 
                     if (HackathonBeacon.CHECK_IN == foundHackathonBeacon) {
-                        container.setBackground(null);
+                        //container.setBackground(null);
 
                     } else if (HackathonBeacon.PARKING == foundHackathonBeacon) {
-                        container.setBackgroundResource(R.drawable.bg_parking);
+                        //container.setBackgroundResource(R.drawable.bg_parking);
 
                     } else if (HackathonBeacon.GATE_A22 == foundHackathonBeacon) {
-                        container.setBackgroundResource(R.drawable.bg_gate);
+                        //container.setBackgroundResource(R.drawable.bg_gate);
 
                     } else if (HackathonBeacon.SECURITY == foundHackathonBeacon) {
-                        container.setBackground(null);
+                        //container.setBackground(null);
 
                     } else if (HackathonBeacon.CLUB == foundHackathonBeacon) {
-                        container.setBackgroundResource(R.drawable.bg_club);
+                        //container.setBackgroundResource(R.drawable.bg_club);
                     }
 
 

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.radiusnetworks.proximity.androidproximityreference.MainActivity;
@@ -111,19 +112,43 @@ public class AVIPFragment extends Fragment implements MainActivity.OnRefreshSele
         String avip_line_1 = AVIP_temps.getString("avip_line_1", "");
         String avip_line_2 = AVIP_temps.getString("avip_line_2", "");
         String avip_line_3 = AVIP_temps.getString("avip_line_3", "");
+        Boolean weatherEnabled = AVIP_temps.getBoolean("avip_weather_enabled", false);
 
         // Sets the text.
         avip_fragment_line_1.setText(avip_line_1);
         avip_fragment_line_2.setText(avip_line_2);
         avip_fragment_line_3.setText(avip_line_3);
+
+        // Set custom font.
+        avip_fragment_line_1.setTypeface(AVIPFont.getInstance(this.getActivity()).getTypeFace());
+        avip_fragment_line_2.setTypeface(AVIPFont.getInstance(this.getActivity()).getTypeFace());
+        avip_fragment_line_3.setTypeface(AVIPFont.getInstance(this.getActivity()).getTypeFace());
+
+        // Set up weather icon.
+        if (weatherEnabled) { setUpWeather(true); }
+        else { setUpWeather(false); }
     }
 
-    private void setUpImages() {
+    private void setUpWeather(Boolean enableWeather) {
 
-        // Loads the weather icon.
-        int weatherImage = R.drawable.aa_icon;
+        LinearLayout weather_container = (LinearLayout) avip_fragment_view.findViewById(R.id.avip_fragment_weather_container);
+
+        int weatherImage = R.drawable.transparent_tile;
         ImageView weatherIcon = (ImageView) avip_fragment_view.findViewById(R.id.avip_fragment_weather_icon);
-        Picasso.with(this.getActivity()).load(weatherImage).noFade().into(weatherIcon);
+
+        // Weather is enabled.
+        if (enableWeather) {
+            weatherImage = R.drawable.weather;
+            weather_container.setVisibility(View.VISIBLE);
+        }
+
+        // Blank icon if weather is not enabled.
+        else {
+            weatherImage = R.drawable.transparent_tile;
+            weather_container.setVisibility(View.GONE);
+        }
+
+        Picasso.with(this.getActivity()).load(weatherImage).noFade().resize(128, 128).centerCrop().into(weatherIcon);
     }
 
     private void updateBackground(String beacon) {

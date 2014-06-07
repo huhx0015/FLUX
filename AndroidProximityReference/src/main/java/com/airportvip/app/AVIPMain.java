@@ -30,6 +30,7 @@ public class AVIPMain extends FragmentActivity  {
 
     // CLASS VARIABLES
     private AVIPUser vip;
+    private AVIPWeather vipWeather;
 
     /** ACTIVITY LIFECYCLE FUNCTIONALITY _______________________________________________________ **/
 
@@ -39,9 +40,11 @@ public class AVIPMain extends FragmentActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // INITIALIZE AVIPUser class.
+        // INITIALIZE AVIPUser & AVIPWeather class.
         vip = new AVIPUser();
         vip.initializeVIP(); // Sets the VIP dummy stats.
+        vipWeather = new AVIPWeather();
+        vipWeather.initializeWeather(); // Sets the dummy weather stats.
 
         // LAYOUT INITIALIZATION
         setUpLayout(); // Sets up the layout for the activity.
@@ -145,14 +148,17 @@ public class AVIPMain extends FragmentActivity  {
         // Gate information.
         TextView gateText = (TextView) findViewById(R.id.avip_sticky_gate);
         TextView departureTime = (TextView) findViewById(R.id.avip_sticky_departure);
+        TextView flightNumber = (TextView) findViewById(R.id.avip_sticky_flight_number);
 
         // Sets sticky text properties.
+        flightNumber.setText(vip.getFlightNumber());
         gateText.setText(vip.getGateNumber());
         departureTime.setText(vip.getEtaDeparture());
 
         // Sets custom font properties.
-        //gateText.setTypeface(AVIPFont.getInstance(this).getTypeFace());
-        //departureTime.setTypeface(AVIPFont.getInstance(this).getTypeFace());
+        flightNumber.setTypeface(AVIPFont.getInstance(this).getTypeFace());
+        gateText.setTypeface(AVIPFont.getInstance(this).getTypeFace());
+        departureTime.setTypeface(AVIPFont.getInstance(this).getTypeFace());
     }
 
     private void setUpButtons() {
@@ -162,6 +168,12 @@ public class AVIPMain extends FragmentActivity  {
         Button wifiButton = (Button) findViewById(R.id.avip_wifi_button);
         Button weatherButton = (Button) findViewById(R.id.avip_weather_button);
         Button dealButton = (Button) findViewById(R.id.avip_deal_button);
+
+        // Set custom text.
+        flightButton.setTypeface(AVIPFont.getInstance(this).getTypeFace());
+        wifiButton.setTypeface(AVIPFont.getInstance(this).getTypeFace());
+        weatherButton.setTypeface(AVIPFont.getInstance(this).getTypeFace());
+        dealButton.setTypeface(AVIPFont.getInstance(this).getTypeFace());
 
         flightButton.setOnClickListener(new View.OnClickListener() {
 
@@ -276,7 +288,13 @@ public class AVIPMain extends FragmentActivity  {
 
     private void updateFragmentText(String fragment) {
 
-        String avip_line_1, avip_line_2, avip_line_3;
+        // Preference values.
+        String avip_line_1, avip_line_2, avip_line_3, avip_weather;
+        Boolean isWeather = false;
+
+        // Sets the preferences.
+        AVIP_temps = getSharedPreferences("avip_temps", Context.MODE_PRIVATE);
+        AVIP_temps_editor = AVIP_temps.edit();  // Sets up shared preferences for editing.
 
         // Update the fragment texts.
         if (fragment.equals("WELCOME")) {
@@ -293,15 +311,17 @@ public class AVIPMain extends FragmentActivity  {
         }
 
         else if (fragment.equals("FLIGHT")) {
-            avip_line_1 = "CHICAGO, IL";
-            avip_line_2 = "FL 12345";
-            avip_line_3 = "SEAT 24B";
+            avip_line_1 = vip.getDestinationName();
+            avip_line_2 = vip.getFlightNumber();
+            avip_line_3 = vip.getSeatNumber();
         }
 
         else if (fragment.equals("WEATHER")) {
-            avip_line_1 = "CHICAGO, IL";
-            avip_line_2 = "48°";
-            avip_line_3 = "";
+            avip_line_1 = vipWeather.getArrivalName();
+            avip_line_2 = vipWeather.getArrivalTemp();
+            avip_line_3 = vipWeather.getArriveCurrentWeather();
+
+            AVIP_temps_editor.putBoolean("avip_weather_enabled", true); // Enable weather icon.
         }
 
         else if (fragment.equals("WIFI")) {
@@ -316,9 +336,6 @@ public class AVIPMain extends FragmentActivity  {
             avip_line_3 = "";
         }
 
-        // Sets the preferences.
-        AVIP_temps = getSharedPreferences("avip_temps", Context.MODE_PRIVATE);
-        AVIP_temps_editor = AVIP_temps.edit();  // Sets up shared preferences for editing.
         AVIP_temps_editor.putString("avip_line_1", avip_line_1);
         AVIP_temps_editor.putString("avip_line_2", avip_line_2);
         AVIP_temps_editor.putString("avip_line_3", avip_line_3);
