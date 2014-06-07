@@ -1,0 +1,260 @@
+<FrameLayout xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/avip_main_layout"
+    android:background="@android:color/background_dark">
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/avip_background" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/avip_sticky_container"
+        android:background="@android:color/black"
+        android:layout_gravity="top|center_horizontal">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/avip_sticky_flight_icon_container"
+            android:layout_gravity="center">
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/avip_sticky_flight_icon"
+                android:layout_gravity="center" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/avip_sticky_spacer_1"
+            android:padding="1dp"
+            android:visibility="invisible" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/avip_sticky_gate_container"
+            android:padding="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GATE A12"
+                android:id="@+id/avip_sticky_gate"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/avip_sticky_spacer_2"
+            android:padding="1dp"
+            android:visibility="invisible" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:focusableInTouchMode="false"
+            android:id="@+id/avip_sticky_departure_container"
+            android:padding="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12:00 AM CST"
+                android:id="@+id/avip_sticky_departure"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:gravity="right" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:id="@+id/avip_button_container">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/avip_button_subcontainer">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/avip_button_row_1"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal">
+
+                <Button
+                    android:layout_width="128dp"
+                    android:layout_height="wrap_content"
+                    android:text="FLIGHT"
+                    android:id="@+id/avip_flight_button"
+                    android:background="@drawable/avip_button_background"
+                    android:padding="20dp"
+                    android:textColor="@android:color/black" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/avip_button_row_1_spacer"
+                    android:visibility="invisible"
+                    android:padding="2dp" />
+
+                <Button
+                    android:layout_width="128dp"
+                    android:layout_height="wrap_content"
+                    android:text="WI-FI"
+                    android:id="@+id/avip_wifi_button"
+                    android:background="@drawable/avip_button_background"
+                    android:padding="20dp"
+                    android:textColor="@android:color/black" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/avip_button_container_spacer_1"
+                android:visibility="invisible"
+                android:padding="2dp" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/avip_button_row_2"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal">
+
+                <Button
+                    android:layout_width="128dp"
+                    android:layout_height="wrap_content"
+                    android:text="WEATHER"
+                    android:id="@+id/avip_weather_button"
+                    android:background="@drawable/avip_button_background"
+                    android:padding="20dp"
+                    android:textColor="@android:color/black" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/avip_button_row_2_spacer"
+                    android:visibility="invisible"
+                    android:padding="2dp" />
+
+                <Button
+                    android:layout_width="128dp"
+                    android:layout_height="wrap_content"
+                    android:text="BONUS"
+                    android:id="@+id/avip_deal_button"
+                    android:background="@drawable/avip_button_background"
+                    android:padding="20dp"
+                    android:textColor="@android:color/black" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/avip_fragment_container"
+            android:layout_gravity="center"
+            android:visibility="invisible"
+            android:background="@android:color/transparent">
+
+
+            </LinearLayout>
+
+    </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity"
+        tools:ignore="MergeRootFrame"
+        android:keepScreenOn="true"
+        android:visibility="invisible">
+
+        <EditText
+            android:id="@+id/username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top"
+            android:text="Michael Jordan" />
+
+        <TextView
+            android:id="@+id/currentLocation"
+            android:layout_below="@id/username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top"
+            android:text="Current Location: " />
+
+        <TextView
+            android:id="@+id/previousLocations"
+            android:layout_below="@id/currentLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top"
+            android:text="Previous Locations: " />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_below="@id/previousLocations"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top"
+            android:text="Visible iBeacons: " />
+
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@id/title"
+            >
+
+            <TableLayout
+                android:id="@+id/beacon_table"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal">
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"></TableRow>
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+
+                    <TableRow
+                        android:id="@+id/beacon_row"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_column="0"></TableRow>
+                </TableRow>
+
+            </TableLayout>
+        </ScrollView>
+    </RelativeLayout>
+
+
+</FrameLayout>

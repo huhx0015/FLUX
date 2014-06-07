@@ -1,0 +1,26 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="TEMPS"
+        android:key="avip_temps">
+        <EditTextPreference
+            android:key="avip_fragment"
+            android:summary="Current Fragment"
+            android:title="FRAGMENT NAME"
+            android:defaultValue="MAIN"/>
+        <EditTextPreference
+            android:key="avip_line_1"
+            android:summary="Fragment Line 1"
+            android:title="FRAGMENT LINE 1"
+            android:defaultValue="LINE 1"/>
+        <EditTextPreference
+            android:key="avip_line_2"
+            android:summary="Fragment Line 2"
+            android:title="FRAGMENT LINE 2"
+            android:defaultValue="LINE 2"/>
+        <EditTextPreference
+            android:key="avip_line_3"
+            android:summary="Fragment Line 3"
+            android:title="FRAGMENT LINE 3"
+            android:defaultValue="LINE 3"/>
+    </PreferenceCategory>
+</PreferenceScreen>

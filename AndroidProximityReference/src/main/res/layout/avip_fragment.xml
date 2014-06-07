@@ -1,0 +1,70 @@
+<FrameLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/avip_fragment_layout"
+    android:background="@android:color/transparent">
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/avip_fragment_background" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:gravity="right"
+        android:id="@+id/avip_fragment_container">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/avip_fragment_weather_container"
+            android:layout_gravity="center"
+            android:padding="20dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/avip_fragment_weather_icon" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|right"
+            android:gravity="center_vertical|center_horizontal"
+            android:id="@+id/avip_fragment_sub_container"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/avip_line_1"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:text="LINE 1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/avip_line_2"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:text="LINE 2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/avip_line_3"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:text="LINE 3" />
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>
