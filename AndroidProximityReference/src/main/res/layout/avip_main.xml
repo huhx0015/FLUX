@@ -8,8 +8,7 @@
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/avip_background"
-        android:background="@drawable/bg_parking" />
+        android:id="@+id/avip_background" />
 
     <LinearLayout
         android:orientation="horizontal"

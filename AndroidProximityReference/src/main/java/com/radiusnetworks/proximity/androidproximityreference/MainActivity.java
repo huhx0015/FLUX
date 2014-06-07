@@ -1,11 +1,7 @@
 package com.radiusnetworks.proximity.androidproximityreference;
 
-import android.app.Activity;
-import android.app.ActionBar;
-import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -15,12 +11,9 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -29,14 +22,10 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.airportvip.app.AVIPFont;
 import com.airportvip.app.AVIPFragment;
 import com.airportvip.app.AVIPUser;
 import com.airportvip.app.AVIPWeather;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import com.radiusnetworks.ibeacon.IBeacon;
 import com.radiusnetworks.ibeacon.IBeaconConsumer;
 import com.radiusnetworks.ibeacon.IBeaconData;
@@ -46,16 +35,34 @@ import com.radiusnetworks.ibeacon.Region;
 import com.radiusnetworks.ibeacon.client.DataProviderException;
 import com.radiusnetworks.proximity.ibeacon.IBeaconManager;
 import com.squareup.picasso.Picasso;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends FragmentActivity implements IBeaconConsumer, RangeNotifier, IBeaconDataNotifier {
 
-    /** HUH MODIFICATIONS _____________________________________________________________________  **/
+/**------------------------------------------------------------------------------------------------
+ * HUHX0015 CLASS CHANGE NOTES:
+ * ------------------------------------------------------------------------------------------------
+ * + MainActivity extends FragmentActivity. Needed to interact with AVIPFragment Fragment class.
+ * + MainActivity implements View.OnTouchListner. Used for detecting tap events.
+ *
+ * **/
+
+public class MainActivity extends FragmentActivity implements IBeaconConsumer, RangeNotifier, IBeaconDataNotifier, View.OnTouchListener {
+
+    /** CLASS VARIABLES ________________________________________________________________________ **/
+
+    // BEACON IDENTIFER VARIABLE
+    private String beaconID = "HOME";
+
+    // IMAGE VARIABLES
+    private ImageView avip_background; // Used for the image background.
+    private int imageValue = 0; // Current background reference.
+
+    // GESTURE VARIABLES
+    private GestureDetector appGestures; // Used for detecting gestures.
 
     // SYSTEM VARIABLES
     private SharedPreferences AVIP_temps; // SharedPreferences objects that store settings for the application.
@@ -69,8 +76,13 @@ public class MainActivity extends FragmentActivity implements IBeaconConsumer, R
     private AVIPUser vip;
     private AVIPWeather vipWeather;
 
-    TextView departureTime;
+    // LAYOUT VARIABLES
+    private TextView departureTime;
 
+    /** ACTIVITY FUNCTIONALITY _________________________________________________________________ **/
+
+    // This function runs immediately when the activity starts. Will chose either "main_activity.xml"
+    // or "avip_main.xml" as the main layout depending on the value of isDebug.
     private void chooseLayout(Boolean isDebug) {
 
         // Use Lance's original layout
@@ -95,6 +107,10 @@ public class MainActivity extends FragmentActivity implements IBeaconConsumer, R
 
             welcomeVIP(); // Shows the first two frames.
 
+            // GESTURE INITIALIZATION: Sets up onTouch and GestureListeners for screen touch events.
+            setGestureListener(); // Sets up a GestureListener to detect alternative gestures like double-tap.
+            avip_background.setOnTouchListener(this); // Sets up an onTouch listener to detect simple gestures like pinch and drag.
+
             // Starts countdown timer.
             countDownToFlight();
         }
@@ -116,10 +132,50 @@ public class MainActivity extends FragmentActivity implements IBeaconConsumer, R
         int count = fm.getBackStackEntryCount();
         fm.popBackStackImmediate(count, 0);
         ft.commit();
-
     }
 
-    /** LAYOUT FUNCTIONALITY _______________________________________________________ **/
+    /** GESTURE FUNCTIONALITY __________________________________________________________________ **/
+
+    @Override
+    public boolean onTouch(View v, MotionEvent rawEvent) {
+       appGestures.onTouchEvent(rawEvent); // Listens for alternative gestures such as double-tap.
+       return true;
+    }
+
+    // setGestureListener(): Sets up a GestureDetector class. This allows for the
+    // detection of gestures (such as double-tap and long-press) and actions to take when such
+    // gestures are detected.
+    private void setGestureListener() {
+
+        // Initializes the mapGestures GestureDetector object.
+        appGestures = new GestureDetector(this,
+                new GestureDetector.SimpleOnGestureListener() {
+
+
+                    @Override
+                    public boolean onSingleTapConfirmed (MotionEvent e) {
+
+                        setUpBackground(beaconID);
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onDoubleTap(MotionEvent rawEvent) {
+
+                        setUpBackground(beaconID);
+                        return true;
+                    }
+
+                    @Override
+                    public void onLongPress(MotionEvent e) {
+
+                        setUpBackground(beaconID);
+                    }
+                });
+    }
+
+    /** ________________________________________________________________________________________ **/
+    /** LAYOUT FUNCTIONALITY ___________________________________________________________________ **/
 
     // displayFragment(): Displays/hides the fragment & button containers.
     private void displayFragment(Boolean isShow, String fragment) {
@@ -139,21 +195,6 @@ public class MainActivity extends FragmentActivity implements IBeaconConsumer, R
         }
     }
 
-    private void setUpBackground(String fragment) {
-
-        int activityBackground;
-
-        if (fragment.equals("WELCOME")) {
-            activityBackground = R.drawable.bg_parking_v2;
-        }
-
-        else {
-            activityBackground = R.drawable.bg_club;
-        }
-
-        ImageView avip_background = (ImageView) findViewById(R.id.avip_background);
-        Picasso.with(this).load(activityBackground).noFade().into(avip_background); // Loads the image into the ImageView object.
-    }
 
     private void setUpLayout() {
 
@@ -255,6 +296,135 @@ public class MainActivity extends FragmentActivity implements IBeaconConsumer, R
 
     }
 
+    // setUpBackground(): Sets up the background image for the activity.
+    private void setUpBackground(String beacon) {
+
+        int activityBackground;  // Stores the image resource ID of the background image.
+        avip_background = (ImageView) findViewById(R.id.avip_background);
+
+        // PARKING background image.
+        if (beacon.equals("PARKING")) {
+
+            // Switch case for setting the current image background.
+            switch (imageValue) {
+                case 0:
+                    activityBackground = R.drawable.bg_parking;
+                    imageValue++;
+                    break;
+                case 1:
+                    activityBackground = R.drawable.bg_parking_2;
+                    imageValue++;
+                    break;
+                case 2:
+                    activityBackground = R.drawable.bg_parking3;
+                    imageValue = 0;
+                    break;
+                default:
+                    activityBackground = R.drawable.bg_parking;
+                    imageValue = 0;
+            }
+        }
+
+        // CHECKIN background image.
+        else if (beacon.equals("CHECKIN")) {
+
+            // Switch case for setting the current image background.
+            switch (imageValue) {
+                case 0:
+                    activityBackground = R.drawable.bg_checkin;
+                    imageValue++;
+                    break;
+                case 1:
+                    activityBackground = R.drawable.bg_checkin2;
+                    imageValue++;
+                    break;
+                case 2:
+                    activityBackground = R.drawable.bg_checkin3;
+                    imageValue = 0;
+                    break;
+                default:
+                    activityBackground = R.drawable.bg_checkin;
+                    imageValue = 0;
+            }
+        }
+
+        // CLUB background image.
+        else if (beacon.equals("CLUB")) {
+
+            // Switch case for setting the current image background.
+            switch (imageValue) {
+                case 0:
+                    activityBackground = R.drawable.bg_club;
+                    imageValue++;
+                    break;
+                case 1:
+                    activityBackground = R.drawable.bg_club3;
+                    imageValue = 0;
+                    break;
+                default:
+                    activityBackground = R.drawable.bg_club;
+                    imageValue = 0;
+            }
+        }
+
+        // GATE background image.
+        else if (beacon.equals("GATE")) {
+
+            // Switch case for setting the current image background.
+            switch (imageValue) {
+                case 0:
+                    activityBackground = R.drawable.bg_gate;
+                    imageValue++;
+                    break;
+                case 1:
+                    activityBackground = R.drawable.bg_gate2;
+                    imageValue++;
+                    break;
+                case 2:
+                    activityBackground = R.drawable.bg_gate3;
+                    imageValue = 0;
+                    break;
+                default:
+                    activityBackground = R.drawable.bg_gate;
+                    imageValue = 0;
+            }
+        }
+
+        // SECURITY background image.
+        else if (beacon.equals("SECURITY")) {
+
+            // Switch case for setting the current image background.
+            switch (imageValue) {
+                case 0:
+                    activityBackground = R.drawable.bg_security;
+                    imageValue++;
+                    break;
+                case 1:
+                    activityBackground = R.drawable.bg_security_2;
+                    imageValue++;
+                    break;
+                case 2:
+                    activityBackground = R.drawable.bg_security3;
+                    imageValue++;
+                    break;
+                case 3:
+                    activityBackground = R.drawable.bg_security_4;
+                    imageValue = 0;
+                    break;
+                default:
+                    activityBackground = R.drawable.bg_security;
+                    imageValue = 0;
+            }
+        }
+
+        // HOME background image.
+        else {
+            activityBackground = R.drawable.bg_home;
+        }
+
+        Picasso.with(MainActivity.this).load(activityBackground).noFade().into(avip_background); // Loads the image into the ImageView object.
+    }
+
     /** PHYSICAL BUTTON FUNCTIONALITY __________________________________________________________ **/
 
     // BACK KEY:
@@ -274,10 +444,9 @@ public class MainActivity extends FragmentActivity implements IBeaconConsumer, R
 
     /** ADDITIONAL FUNCTIONALITY _______________________________________________________________ **/
 
-
     private void welcomeVIP() {
 
-        final int waitTime = 1500; // 1500 ms
+        final int waitTime = 3000; // 1500 ms
 
         // Displays the welcome frame.
         currentFragment = "WELCOME";
@@ -405,33 +574,47 @@ public class MainActivity extends FragmentActivity implements IBeaconConsumer, R
                 if (!sameHackathonBeacon || !sameDistance) {
 
                     // Background image reference.
-                    int activityBackground = R.drawable.transparent_tile; // BLANK
-                    ImageView avip_background = (ImageView) findViewById(R.id.avip_background);
+                    //int activityBackground = R.drawable.transparent_tile; // BLANK
+                    //avip_background = (ImageView) findViewById(R.id.avip_background);
 
                     if (HackathonBeacon.CHECK_IN == foundHackathonBeacon) {
 
-                        activityBackground = R.drawable.bg_checkin;
-                        Picasso.with(MainActivity.this).load(activityBackground).noFade().into(avip_background); // Loads the image into the ImageView object.
+                        //activityBackground = R.drawable.bg_checkin;
+                        beaconID = "CHECKIN";
+                        imageValue = 0; // Resets the image value.
+                        setUpBackground(beaconID);
+                        //Picasso.with(MainActivity.this).load(activityBackground).noFade().into(avip_background); // Loads the image into the ImageView object.
 
                     } else if (HackathonBeacon.PARKING == foundHackathonBeacon) {
 
-                        activityBackground = R.drawable.bg_parking_v2;
-                        Picasso.with(MainActivity.this).load(activityBackground).noFade().into(avip_background); // Loads the image into the ImageView object.
+                        beaconID = "PARKING";
+                        imageValue = 0; // Resets the image value.
+                        setUpBackground(beaconID);
+                        //activityBackground = R.drawable.bg_parking_v2;
+                        //Picasso.with(MainActivity.this).load(activityBackground).noFade().into(avip_background); // Loads the image into the ImageView object.
 
                     } else if (HackathonBeacon.GATE_A22 == foundHackathonBeacon) {
 
-                        activityBackground = R.drawable.bg_gate;
-                        Picasso.with(MainActivity.this).load(activityBackground).noFade().into(avip_background); // Loads the image into the ImageView object.
+                        beaconID = "GATE";
+                        imageValue = 0; // Resets the image value.
+                        setUpBackground(beaconID);
+
+                        //Picasso.with(MainActivity.this).load(activityBackground).noFade().into(avip_background); // Loads the image into the ImageView object.
 
                     } else if (HackathonBeacon.SECURITY == foundHackathonBeacon) {
 
-                        activityBackground = R.drawable.bg_security; // BLANK
-                        Picasso.with(MainActivity.this).load(activityBackground).noFade().into(avip_background); // Loads the image into the ImageView object.
+                        beaconID = "SECURITY";
+                        imageValue = 0; // Resets the image value.
+                        setUpBackground(beaconID);
+                        //Picasso.with(MainActivity.this).load(activityBackground).noFade().into(avip_background); // Loads the image into the ImageView object.
 
                     } else if (HackathonBeacon.CLUB == foundHackathonBeacon) {
 
-                        activityBackground = R.drawable.bg_club;
-                        Picasso.with(MainActivity.this).load(activityBackground).noFade().into(avip_background); // Loads the image into the ImageView object.
+                        beaconID = "CLUB";
+                        imageValue = 0; // Resets the image value.
+                        setUpBackground(beaconID);
+                        //activityBackground = R.drawable.bg_club;
+                        //Picasso.with(MainActivity.this).load(activityBackground).noFade().into(avip_background); // Loads the image into the ImageView object.
                     }
 
                     if (!sameHackathonBeacon) {
@@ -474,9 +657,8 @@ public class MainActivity extends FragmentActivity implements IBeaconConsumer, R
     private OnRefreshSelected onRefreshSelected;
 
 
-    // END HUH MODIFICATIONS -----------------------------------------------------------------------
-    //----------------------------------------------------------------------------------------------
-
+    /** END OF HUHX0015 MODIFICATIONS ___________________________________________________________**/
+    /** BEGINNING OF LNANEK ORIGINAL CODE ______________________________________________________ **/
 
     public static final String TAG = "MainActivity";
 
