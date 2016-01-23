@@ -3,8 +3,6 @@ FLUX | Wearable World Invents: The Connected Traveler
 
 Team: David Lee, Lance Nanek, Ibrahim Kabil, Andy Kwan, Michael Huh
 
-This Google Android / Glass application is the culmination of a two-day project for the Wearable World Invents: The Connected Traveler Hackathon event. Entitled "FLUX", this application is catered towards VIP American Airlines' travelers, with the goal of providing them a fully automated, convenient and stress-free airport-to-flight experience. 
+FLUX is a travel-related Google Android, Google Glass & web application that was developed for American Airlines at the “Wearable Worlds Invents: The Connected Traveler“ two-day hackathon event in San Francisco. 
 
-Building on top of iBeacon's Android Proximity Reference App, FLUX makes use of iBeacon Bluetooth modules to simulate an airport environment. It provides graphical directions for the VIP as they progress through the airport. 
-
-Please note that pre-programmed iBeacons are required for "FLUX" to run properly.
+FLUX was designed to guide American Airlines VIPs through airports and notify the VIP of any flight changes through Google Android and Glass applications. Using iBeacon sensors to simulate different parts of an airport, the information on FLUX would change accordingly depending on which area the VIP is currently located in. On the server side, American Airlines’ staff would utilize the web application to gain specific information about the VIP, as well as their current whereabouts in the airport. 
