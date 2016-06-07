@@ -45,7 +45,7 @@ public class ScreenWaker {
         long l = SystemClock.uptimeMillis();
         // false will bring the screen back as bright as it was, true - will dim
         // it
-        power.userActivity(l, false);
+        //power.userActivity(l, false);
     }
 
 }
